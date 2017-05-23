@@ -1,0 +1,6 @@
+A web server for education purpose
+Status
+ - Make a static webserver
+Build:
+ - cmake ./
+ - make
