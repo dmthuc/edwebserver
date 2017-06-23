@@ -10,22 +10,37 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <signal.h>
 #include "web_directory.h"
 #include "response.h"
 #include "request.h"
+
 
 using namespace std;
 const string index_file = "index.html";
 const int Max_line = 100;
 const int Port = 1313;
 const int Backlog = 10;
+void sig_handler(int sig_num)
+{
+   cerr<<"receive signal number:"<<sig_num<<endl;
+   exit(0);
+}
+
 int main()
 {
+    /*set up signal handler*/
+    struct sigaction sa;
+    memset(&sa, 0, sizeof(sa));
+    sa.sa_handler = &sig_handler;
+    sigaction (SIGQUIT, &sa, NULL); 
+    /*finish set up signal handler*/
     int listenfd = socket(AF_INET, SOCK_STREAM, 0);
     if (listenfd < 0)
         cerr<<"socket fail"<<endl; 
     char buff[Max_line] ={0};
-    struct sockaddr_in servaddr = {0};
+    struct sockaddr_in servaddr;
+    memset(&servaddr, 0, sizeof(servaddr));
     servaddr.sin_family = AF_INET;
     servaddr.sin_port = htons(Port);
     servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
@@ -39,13 +54,15 @@ int main()
     while(true) {
         int connfd = accept(listenfd, nullptr,nullptr);
         cout<<" accept new connection"<<endl;
-        Request client_request();
+        Request client_request{};
         //client_request.parse_request(connfd);
         //parse_request(connfd);
         Response::send_OK_header(connfd); 
         web_directory.serve_resource(connfd,"index.html");
         sleep(5);
+        //Response::send_OK_header(connfd); 
         Response::send_close_connection(connfd);
+        web_directory.serve_resource(connfd,"style.css");
         close(connfd);
     }
     //Set up socket server

@@ -17,6 +17,7 @@ void Request::parse_request(const int connfd)
     while((n = read(connfd,recvline,Max_line)) > 0) {
         recvline[n] = 0;
         cout<<recvline<<endl;
+        break;
     }
 
 }
