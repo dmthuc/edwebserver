@@ -53,24 +53,23 @@ int main()
     cout<<"Ed webserver start at port:"<<Port<<endl;
     while(true) {
         int connfd = accept(listenfd, nullptr,nullptr);
+    #if 0
+        if (connfd > 0)
+        {
+            int rval = fork();
+            switch (rval) {
+                case :
+                //do child process stuff
+
+            }
+
+        } 
+    #endif
         cout<<" accept new connection"<<endl;
         Request client_request{};
-        //client_request.parse_request(connfd);
-        //parse_request(connfd);
-        Response::send_OK_header(connfd); 
-        web_directory.serve_resource(connfd,"index.html");
-        sleep(5);
-        //Response::send_OK_header(connfd); 
-        Response::send_close_connection(connfd);
-        web_directory.serve_resource(connfd,"style.css");
+        client_request.parse_request(connfd);
+        Response::send_response(connfd, &client_request);
         close(connfd);
     }
-    //Set up socket server
-
-    //Finish setup socket
-
-    //Loop
-
-
 }
 

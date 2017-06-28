@@ -18,8 +18,9 @@ int Web_directory::serve_resource(const int connfd, const string file_name) cons
     if (!in) cerr << "no file\n";
     for( string line; getline(in,line);)
     {   
-        cout<<line<<endl;
+        cout<<line;
         write(connfd,line.c_str(), line.length());
+        write(connfd,"\r\n", 2);
     }
     
     // copy content of file name to conndf
