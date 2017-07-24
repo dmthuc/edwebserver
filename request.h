@@ -4,12 +4,12 @@
 using namespace std;
 class Request {
 public:
-    explicit Request();
+    explicit Request() = default;
     Request(const Request&) = delete;
     Request(Request &&) = delete;
     Request& operator=(const Request&) = delete;
     Request& operator=(Request &&) = delete;
-    void parse_request(const int connfd);
+    int parse_request(const int connfd);
     string get_url() const;
 private:
     string method;
@@ -18,6 +18,5 @@ private:
 
 };
 
-void parse_request(const int connfd);
 #endif
 
