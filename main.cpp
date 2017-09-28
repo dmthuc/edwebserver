@@ -17,9 +17,9 @@
 #include "File_description_exception.h"
 
 using namespace std;
-const int Max_line = 100;
-const int Port = 1313;
-const int Backlog = 10;
+constexpr int Max_line = 100;
+constexpr int Port = 1313;
+constexpr int Backlog = 10;
 void sig_handler(int sig_num)
 {
    cerr<<"receive signal number:"<<sig_num<<endl;
