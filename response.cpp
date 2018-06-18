@@ -41,9 +41,12 @@ void Response::send_response(const int connfd, Request * request)
         strcpy(buff,"Connection: keep-alive\r\nContent-Type: text/css; charset=iso-8859-1\r\n\r\n");
     } else if ( extension == "js") {
         strcpy(buff,"Connection: keep-alive\r\nContent-Type: text/javascript; charset=iso-8859-1\r\n\r\n");
+    } else if ( extension == "csv"){
+        strcpy(buff,"Connection: keep-alive\r\nContent-Type: application/octet-stream\r\n\r\n");
     } else {
         strcpy(buff,"Connection: keep-alive\r\nContent-Type: text/html; charset=iso-8859-1\r\n\r\n");
-    }
+    } 
+
     if (-1 == write(connfd,buff, strlen(buff)))
         throw  File_description_exception();
     if( file == string{""}) file = Index_file;
