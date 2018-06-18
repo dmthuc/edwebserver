@@ -20,12 +20,14 @@ using namespace std;
 constexpr int Max_line = 100;
 constexpr int Port = 1313;
 constexpr int Backlog = 10;
+
+int listenfd = -1;
 void sig_handler(int sig_num)
 {
    cerr<<"receive signal number:"<<sig_num<<endl;
+   close(listenfd);
    exit(0);
 }
-
 int main()
 {
     /*set up signal handler*/
@@ -34,7 +36,7 @@ int main()
     sa.sa_handler = &sig_handler;
     sigaction (SIGQUIT, &sa, NULL); 
     /*finish set up signal handler*/
-    int listenfd = socket(AF_INET, SOCK_STREAM, 0);
+    listenfd = socket(AF_INET, SOCK_STREAM, 0);
     if (listenfd < 0) {
         cerr<<"socket fail"<<endl; 
         exit(1);
@@ -49,7 +51,7 @@ int main()
     {
         cerr<<"bind failed"<<endl;
         exit(1);
-    }    
+    } 
     if(0 != listen(listenfd, Backlog)) {
         cerr<<"listen err"<<endl;
         exit(1);
@@ -60,12 +62,6 @@ int main()
         int connfd = accept(listenfd, nullptr,nullptr);
         if (connfd > 0)
         {
-        #if 0
-            int rval = fork();
-            switch (rval) {
-                case :
-            }
-        #endif
             cout<<" accept new connection"<<endl;
             Request client_request{};
             try{
